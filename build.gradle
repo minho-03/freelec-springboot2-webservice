@@ -54,4 +54,7 @@ dependencies {
     // Spring Security
     implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
     implementation('org.springframework.boot:spring-boot-starter-mustache')
+    // 세션 저장소를 DB로
+    implementation 'org.springframework.session:spring-session-jdbc'
+
 }
