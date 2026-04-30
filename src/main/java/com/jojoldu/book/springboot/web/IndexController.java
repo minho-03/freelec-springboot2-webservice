@@ -40,4 +40,9 @@ public class IndexController {
         return "posts-update";
     }
 
+    @GetMapping("/about")
+    public String about() {
+        return "about";
+    }
+
 }
