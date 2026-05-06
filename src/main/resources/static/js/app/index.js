@@ -68,4 +68,10 @@ var main = {
         },
 };
 
+function alertLogin() {
+    if (confirm('글을 등록하려면 로그인이 필요합니다.\n로그인 페이지로 이동할까요?')) {
+        window.location.href = '/oauth2/authorization/google'; // 또는 네이버
+    }
+}
+
 main.init();

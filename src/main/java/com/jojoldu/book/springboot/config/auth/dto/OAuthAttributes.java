@@ -16,9 +16,7 @@ public class OAuthAttributes {
 
     @Builder
 
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
-
-                           String name, String email, String picture) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String picture) {
         this.attributes       = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name             = name;
@@ -31,10 +29,23 @@ public class OAuthAttributes {
 
     // 본 수업은 Google 만 다룹니다 (Naver 생략).
 
-    public static OAuthAttributes of(String registrationId,
-                                     String userNameAttributeName,
-                                     Map<String, Object> attributes) {
+    public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
+        if ("naver".equals(registrationId)) {
+            return ofNaver("id", attributes);
+        }
         return ofGoogle(userNameAttributeName, attributes);
+    }
+
+    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+        return OAuthAttributes.builder()
+                .name((String) response.get("name"))
+                .email((String) response.get("email"))
+                .picture((String) response.get("profile_image")) // 네이버는 profile_image입니다.
+                .attributes(response)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
     }
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName,Map<String, Object> attributes) {
@@ -48,6 +59,8 @@ public class OAuthAttributes {
                 .build();
 
     }
+
+
 
     // User 엔티티를 생성합니다. 처음 가입할 때는 권한이 없는 GUEST 입니다.
     public User toEntity() {
